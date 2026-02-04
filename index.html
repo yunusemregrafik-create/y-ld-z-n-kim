@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Hangi Sahabe Karakter Yönüne Yakınsın?</title>
+<style>
+body{font-family:Arial;background:#eef2f7;padding:20px;}
+.container{max-width:950px;margin:auto;background:white;padding:25px;border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.1);}
+button{margin-top:10px;padding:12px;width:100%;border:none;background:#2c3e50;color:white;border-radius:8px;font-size:15px;cursor:pointer;text-align:left;}
+button:hover{background:#34495e;}
+h2{text-align:center;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Hangi Sahabe Karakter Yönüne Yakınsın?</h2>
+<div id="quiz"></div>
+</div>
+
+<script>
+const results={
+"Omer":{name:"Hz. Ömer",text:"Adalet duygun çok güçlüdür. Haksızlık karşısında susmak sana ağır gelir. Zor anlarda geri çekilmez, doğru olanın yanında durursun. İnsanlar seni sert bulabilir ama senin derdin kırmak değil, eğriyi düzeltmektir. Sorumluluk arttıkça duruşun ağırlaşır."},
+"EbuBekir":{name:"Hz. Ebû Bekir",text:"Kalbi yumuşak ama güçlü bir yapın var. İnsanların yalnız kalmaması ve kalplerin kırılmaması senin için önemlidir. Krizde bağ kurar, sertliği yumuşatırsın. Sessiz iyilik senin yolundur."},
+"Ali":{name:"Hz. Ali",text:"Yüzey seni tatmin etmez. Olayların arkasındaki hikmeti ararsın. Düşünmeden konuşmaz, anlamadan hareket etmezsin. İlme değer verirsin. Derinlik senin gücündür."},
+"Osman":{name:"Hz. Osman",text:"Nazik ve zarif bir ruh taşıyorsun. Gerginliği büyütmez, ortamı yumuşatırsın. Ortamın huzuru için gerekirse yük taşırsın. Sabır ve hayâ sende güçlüdür. Kayınpederin seni çok sever. "},
+"Hamza":{name:"Hz. Hamza",text:"Koruyucu bir cesaretin var. Tehlike gördüğünde geri durmazsın. Kuvveyi akliyyen ve kuvveyi gadabiyyen itidal noktasında.  Gücün başkalarını savunmaya yöneliktir."},
+"Halid":{name:"Hz. Halid bin Velid",text:"Mücadele ruhun yüksek. Engel gördüğünde durmaz, yol ararsın. Sen bir stratejik dehasın. Krizde zihnin hızlanır ve çözüm üretirsin."},
+"Talha":{name:"Hz. Talha",text:"Bağlılık ve fedakârlık yönün derindir. İnce ve hassas bir kalbin var. Sevdiğin insanlar için kendini ortaya koymaktan çekinmezsin."},
+"Zubeyr":{name:"Hz. Zübeyr",text:"Sadakat senin temel direğindir. Güven senin için kutsaldır. Yanında olan kişi yalnız kalmaz."},
+"Abdurrahman":{name:"Hz. Abdurrahman bin Avf",text:"Üreten ve paylaşan bir yapın var. Krizde çözüm üretir, imkân bulduğunda dağıtırsın."},
+"EbuUbeyde":{name:"Hz. Ebû Ubeyde",text:"Sorumluluk bilincin yüksektir. Sana güvenilir. Görev geldiğinde sabit durursun."},
+"Bilal":{name:"Hz. Bilâl",text:"Sabır sende derindir. Zor şartlar seni yıkmaz, olgunlaştırır. Sessiz ama güçlü bir direncin vardır."},
+"Selman":{name:"Hz. Selman-ı Fârisî",text:"Hakikat arayışı senin temel yönündür. Mücadele eder, fedakarlık yaparsın. Sorgular, araştırır ve yüzeyle yetinmezsin."},
+"Cafer":{name:"Hz. Cafer bin Ebî Tâlib",text:"Hem zeki hem fedakâr bir yapın var. Stratejik adımlar atmakta başarılısın. İnsanları ikna edebilir, zor anlarda yön gösterebilirsin."},
+"EbuZer":{name:"Hz. Ebû Zer",text:"Yanlışa tahammülün azdır. Doğruyu söylemekten çekinmezsin. Zaman zaman eleştirel görünebilirsin. İlke senin pusulandır."},
+"Sad":{name:"Hz. Sa’d bin Muâz",text:"Topluluğa sahip çıkan bir yapın var. İnsanları korur, zor anlarda liderleşirsin. Fedakarsın. "},
+"Nuayman":{name:"Hz. Nuayman",text:"Ortamın yükünü hafifletirsin. Neşe senin ilacın. İnsanları güldürerek iyileştirirsin. Biraz ciddiyete ihtiyacın olabilir. "}
+};
+
+let scores={}; Object.keys(results).forEach(k=>scores[k]=0);
+
+const questions=[
+["Bir ortamda açık bir haksızlık gördüğünde, ortamın gerileceğini bilsen bile iç dünyanda baskın olan düşünce hangisidir?",["Doğru olan söylenmeli","Omer"],["Kalpler korunmalı","EbuBekir"],["Haksızlığın kökünde yatan sebebi öğrenmeliyim","Ali"],["Çözüm bulmalıyım","Halid"]],
+["Gergin bir toplulukta senin varlığın genelde nasıl bir etki oluşturur?",["Dosta güven düşmana korku","Omer"],["Yumuşatır","Osman"],["Düşmana bile güven verir","Ali"],["Dengeli bir şekilde harekete geçirir","Hamza"]],
+["Hayatta seni en çok yoran şey hangisidir?",["Haksızlığa susmak","Omer"],["Birinin kalbini kırmak","EbuBekir"],["Yüzeysel yaşamak","Selman"],["Çaresizlik","Halid"]],
+["Bir karar verirken seni yönlendiren temel ölçü nedir?",["İlke","EbuZer"],["Merhamet","EbuBekir"],["Hikmet","Ali"],["Sonuç","Halid"]],
+["İnsanlar zor zamanlarında sana geldiğinde genelde nasıl destek olursun?",["Akıl veririm","Cafer"],["Kendimden fedakarlık yaparım","EbuBekir"],["Yol gösteririm","Ali"],["Sorumluluğunu üstlenirim","Hamza"]],
+["Bir toplulukta doğal rolün hangisidir?",["Neşe veren","Nuayman"],["Sorumluluk alan","Sad"],["Mücadele eden","Selman"],["Derin devlet","Cafer"]],
+["İç dünyanda daha baskın olan yön hangisidir?",["Hak duygusu","Omer"],["Fedakarlık","EbuBekir"],["Hakikat arayışı","Selman"],["Mücadele ruhu","Halid"]],
+["Bir şeylerin yanlış gittiğini fark ettiğinde ilk eğilimin nedir?",["Müdahale ederim","Omer"],["Sabrederim","Osman"],["Gözlemlemeye devam ederim","Ali"],["Plan kurarım","Halid"]],
+["Seni en çok etkileyen insan tipi hangisidir?",["Pervasız olan","Omer"],["Savunmasız","EbuBekir"],["Derin düşünen","Ali"],["Güçlü duran","Hamza"]],
+["Kendini anlatan cümle hangisine daha yakındır?",["Doğru bildiğimden vazgeçmem","Omer"],["Şartlar ne olursa olsun hak ehlini desteklerim","EbuBekir"],["Hedefime ulaşmak için her zorluğa göğüs gererim","Selman"],["Azdan az, çoktan çok gider","Halid"]],
+["Kriz anında iç refleksin nasıl olur?",["Sınırsız öfke","Omer"],["Sessizlik","Osman"],["Derin tefekkür","Ali"],["Soğukkanlı olurum","Hamza"]],
+["İnsanların sana güvenme sebebi genelde nedir?",["Net duruşum","Omer"],["Destekleyici yapım","EbuBekir"],["Yardımseverliğim","Zübeyr"],["Stratejik zekam ve hızım","Halid"]],
+["Gerçek güç senin için daha çok ne ifade eder?",["Adalet","Omer"],["Nefis terbiyesi","EbuBekir"],["Hikmet ehli olmak","Ali"],["Had bildirmek","Hamza"]],
+["Birine yardım ederken yaklaşımın nasıldır?",["Sahiplenirim","Talha"],["Yanında kalırım","Zubeyr"],["Düşündürürüm","Ali"],["Kanatlarım altına alırım","Hamza"]],
+["Hayatta seni besleyen ana şey nedir?",["İlke","EbuZer"],["Sevgi","EbuBekir"],["Anlam","Selman"],["Hedef","Halid"]],
+["İnsanlar arasında sorun çıktığında genelde ne yaparsın?",["Düzeltirim","Omer"],["Kırılmayı engellerim","Osman"],["Adaleti sağlarım","Ali"],["Dikkat dağıtırım","Halid"]],
+["Sana göre gerçek liderlik nedir?",["Adaletle ayakta durmak","Omer"],["İnsanları korumak","Sad"],["Hikmetle yön vermek","Ali"],["Yol açmak","Cafer"]],
+["Seni içten içe en çok yoran durum nedir?",["Haksızlık","Omer"],["Nezaketsiz insanlar","EbuBekir"],["Anlamsızlık","Selman"],["Güçsüz hissetmek","Halid"]],
+["İç dünyandaki baskın ses hangisidir?",["Hak","EbuZer"],["Şefkat","EbuBekir"],["Azim","Selman"],["Akıl","Hamza"]],
+["Birine destek olurken daha çok ne verirsin?",["Güç","Sad"],["Kalp","EbuBekir"],["Bilgi","Ali"],["Umut","Nuayman"]],
+
+["Bir yanlışı düzeltirken yaklaşımın hangisine yakındır?",["Mantiki izahlar yaparım","Cafer"],["Yanlışın kendisine karşı dururum","EbuZer"],["Nasihat ederim","EbuBekir"],["Sabrederim","Bilal"]],
+["Haksızlık karşısında seni anlatan tavır hangisidir?",["Öfkelenirim","Omer"],["Gerçeği söylerim","EbuZer"],["Sorumluluğu üstlenirim","Osman"],["Hak için sabırla mücadele ederim","Bilal"]],
+["Tehlikeli bir durumda ilk refleksin nedir?",["Korurum","Hamza"],["Hamle yaparım","Halid"],["Sakinleştiririm","Osman"],["Düşünürüm","Ali"]],
+["Cesaret senin için daha çok ne demektir?",["Zayıfı savunmak","Hamza"],["Zoru başarmak","Halid"],["Sabır göstermek","Bilal"],["Sorumluluk almak","Osman"]],
+["Haksız eleştirilere maruz kaldığında ne yaparsın?",["Sakince kendimi açıklarım","EbuBekir"],["Sessizce yük alırım","Osman"],["Mantiki delillerle eleştirileri reddederim","Ali"],["Haksızlığa tahammül edemesem de kendimi sorgularım","Omer"]],
+["Seni en iyi anlatan özellik hangisidir?",["Şefkat","EbuBekir"],["Haya ve zarafet","Osman"],["Hikmet","Ali"],["Adalet","Omer"]],
+["Zor bir meselede eğilimin hangisidir?",["Hakikat ararım","Selman"],["İkna ederim","Cafer"],["Sabrederim","Bilal"],["Hüküm veririm","Omer"]],
+["Gücünün kaynağı nedir?",["Heyecan","Selman"],["Muhabbet","Cafer"],["Vakar","Osman"],["Hakikate saygı","EbuZer"]],
+["Birine bağlılığın nasıl bir hal alır?",["Fedakârlık","Talha"],["Sadakat","Zubeyr"],["Sabır","Bilal"],["Koruma","Sad"]],
+["Birini savunman gerektiğinde ne yaparsın?",["Kendimi ortaya koyarım","Talha"],["Yanında dururum","Zubeyr"],["Düşünürüm","Ali"],["Beklerim","Bilal"]],
+["Zorlukta duruşun nasıldır?",["Zarif sabır","Osman"],["Sessiz direniş","Bilal"],["Müdahale","Omer"],["Plan","Halid"]],
+["İnsanlar seni daha çok nasıl tanımlar?",["Barışçıl soğukkanlı","Osman"],["Dayanıklı","Bilal"],["Akıllı ve güçlü","Hamza"],["Şakacı","Nuayman"]],
+["Bilgi senin için ne ifade eder?",["Hikmet","Ali"],["İlim","Selman"],["Güç","Halid"],["Araç","Abdurrahman"]],
+["Bir meseleyi ele alış tarzın nasıldır?",["Anlam odaklı","Ali"],["Muhabbet ve Heyecan odaklı","Selman"],["Başarı odaklı","Halid"],["Sabır odaklı","Bilal"]],
+["Gergin bir ortamda genelde ne yaparsın?",["Atmosferi hafifletirim","Nuayman"],["Derinleştiririm","Ali"],["Sakinleştiririm","Osman"],["Düzenlerim","Omer"]],
+["Sana bir emanet verildiğinde yaklaşımın nedir?",["Üretirim","Abdurrahman"],["Korurum","EbuUbeyde"],["Düşünürüm","Ali"],["Harekete geçerim","Halid"]],
+["Sorumluluk karşısında duruşun nasıldır?",["İmkan üretirim","Abdurrahman"],["Sabit dururum","EbuUbeyde"],["Çekilirim","Bilal"],["Planlarım","Halid"]],
+["Topluluk zor bir durumdaysa ne yaparsın?",["Sahip çıkarım","Sad"],["Düşündürürüm","Ali"],["Hafifletirim","Nuayman"],["Yönlendiririm","Cafer"]],
+["Hayatının sonunda arkandan ne denmesini istersin?",["Doğruluktan taviz vermedi","EbuZer"],["Kerem sahibiydi","Abdurrahman"],["Derin ve hikmetliydi","Ali"],["Umut verdi","Nuayman"]],
+["Hayat mottosu hangisine daha yakındır?",["Hak için yaşamak","Omer"],["Aşk için feda olmak","EbuBekir"],["Hayallere kavuşmak","Selman"],["Muhammed'in sav Rabbine güveniyorum","Halid"]]
+];
+
+let current=0;
+
+function showQ(){
+let quiz=document.getElementById("quiz");
+if(current>=questions.length){showResult();return;}
+let q=questions[current];
+quiz.innerHTML="<h3>Soru "+(current+1)+": "+q[0]+"</h3>";
+q.slice(1).forEach(a=>{
+let b=document.createElement("button");
+b.innerText=a[0];
+b.onclick=()=>{scores[a[1]]++;current++;showQ();};
+quiz.appendChild(b);
+});
+}
+
+function showResult(){
+let max=0,winner="";
+for(let k in scores){if(scores[k]>max){max=scores[k];winner=k;}}
+document.getElementById("quiz").innerHTML="<h2>Sonuç: "+results[winner].name+"</h2><p>"+results[winner].text+"</p>";
+}
+
+showQ();
+</script>
+</body>
+</html>
